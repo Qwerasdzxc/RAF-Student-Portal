@@ -55,7 +55,7 @@ ROOT_URLCONF = 'raf_student_portal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates', os.path.join(BASE_DIR, 'demo_app/../templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +69,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'raf_student_portal.wsgi.application'
+
+LOGIN_REDIRECT_URL = '/subjects'
 
 
 # Database

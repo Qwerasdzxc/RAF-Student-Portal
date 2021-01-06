@@ -1,0 +1,15 @@
+{%  extends 'master.html' %}
+
+{% block title %}
+    Subjects
+{% endblock %}
+
+{%  block content %}
+    <div class="list-group">
+        {% for subject in subjects %}
+            <a class="list-group-item list-group-item-action" href="{% url 'portal:subject' subject.id %}">
+                {{ subject.name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
