@@ -19,5 +19,27 @@
             </blockquote>
         </div>
     </div>
+    <h1>News</h1>
+    <div class="list-group">
+        {% for news_item in news %}
+        <div class="card">
+            <div class="card-header">
+                <h1>
+                    {{ news_item.title }}
+                    {% if perms.portal.delete_news %}
+                        <a href="{% url 'portal:delete_news' subject.id news_item.id %}">
+                            <span class="badge badge-danger">Delete</span>
+                        </a>
+                    {% endif %}
+                </h1>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>{{ news_item.description }}</p>
+                </blockquote>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}

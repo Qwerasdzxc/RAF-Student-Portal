@@ -20,6 +20,8 @@ class SubjectForm(ModelForm):
         fields = ['name', 'description']
 
 class NewsForm(ModelForm):
+    subject = f.ModelChoiceField(queryset=Subject.objects.all())
+
     class Meta:
         model = News
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'subject']

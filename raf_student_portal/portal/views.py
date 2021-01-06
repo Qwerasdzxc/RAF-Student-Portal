@@ -43,7 +43,8 @@ def subjects(req):
 @login_required
 def subject(req, id):
     tmp = get_object_or_404(Subject, id=id)
-    return render(req, 'subject.html', {'subject': tmp, 'page_title': tmp.name})
+    news = tmp.news_set.all()
+    return render(req, 'subject.html', {'subject': tmp, 'news': news, 'page_title': tmp.name})
 
 
 @permission_required('portal.change_subject')
@@ -56,7 +57,7 @@ def edit_subject(req, id):
             a.name = form.cleaned_data['name']
             a.description = form.cleaned_data['description']
             a.save()
-            return redirect('portal:subjects')
+            return redirect('portal:subject', id=id)
         else:
             return render(req, 'edit_subject.html', {'form': form, 'id': id})
     else:
@@ -71,7 +72,7 @@ def new_subject(req):
         form = SubjectForm(req.POST)
 
         if form.is_valid():
-            a = Subject(name=form.cleaned_data['name'], description=form.cleaned_data['description'], owner=req.user)
+            a = Subject(name=form.cleaned_data['name'], description=form.cleaned_data['description'])
             a.save()
             return redirect('portal:subjects')
         else:
@@ -79,3 +80,26 @@ def new_subject(req):
     else:
         form = SubjectForm()
         return render(req, 'new_subject.html', {'form': form})
+
+
+@permission_required('portal.add_news')
+def new_news(req):
+    if req.method == 'POST':
+        form = NewsForm(req.POST)
+
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            n = News(title=form.cleaned_data['title'], description=form.cleaned_data['description'], subject=subject)
+            n.save()
+            return redirect('portal:subject', id=subject.id)
+        else:
+            return render(req, 'new_news.html', {'form': form})
+    else:
+        form = NewsForm()
+        return render(req, 'new_news.html', {'form': form})
+
+@permission_required('portal.delete_news')
+def delete_news(req, subject_id, news_id):
+    news = News.objects.get(pk=news_id)
+    news.delete()
+    return redirect('portal:subject', id=subject_id)

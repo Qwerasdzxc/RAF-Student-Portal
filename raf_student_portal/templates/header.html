@@ -13,6 +13,11 @@
             {% else %}
                 <a class="nav-link" href="{% url 'portal:new_subject' %}">New subject</a>
             {% endif %}
+            {% if not perms.portal.add_news %}
+                <a class="nav-link disabled" href="{% url 'portal:new_news' %}">New news</a>
+            {% else %}
+                <a class="nav-link" href="{% url 'portal:new_news' %}">New news</a>
+            {% endif %}
         </li>
     </ul>
 
